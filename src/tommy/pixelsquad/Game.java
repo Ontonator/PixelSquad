@@ -28,10 +28,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private long ticks = 0;
 
 	public boolean up, down, left, right;
-	private static final int upKey = KeyEvent.VK_UP;// W;
-	private static final int downKey = KeyEvent.VK_DOWN;// S;
-	private static final int leftKey = KeyEvent.VK_LEFT;// A;
-	private static final int rightKey = KeyEvent.VK_RIGHT;// D;
+	private static final int upKey = KeyEvent.VK_W;// W;
+	private static final int downKey = KeyEvent.VK_S;// S;
+	private static final int leftKey = KeyEvent.VK_A;// A;
+	private static final int rightKey = KeyEvent.VK_D;// D;
 
 	public Ninja ninja;
 	public static Image[] sprNinja = new Image[4];
