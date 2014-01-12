@@ -32,11 +32,14 @@ public class Game extends Canvas implements Runnable, KeyListener {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private static final int UP_KEY = KeyEvent.VK_UP;// W;
 	private static final int DOWN_KEY = KeyEvent.VK_DOWN;// S;
 	private static final int LEFT_KEY = KeyEvent.VK_LEFT;// A;
 	private static final int RIGHT_KEY = KeyEvent.VK_RIGHT;// D;
 =======
+=======
+>>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
 =======
 >>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
 =======
@@ -47,11 +50,14 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private static final int rightKey = KeyEvent.VK_D;// D;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
 
 	public final Player[] player = new Player[4];
 	public static final int CHANGE_PLAYER_KEY = KeyEvent.VK_SPACE;
 	public short currentPlayer;
+=======
+>>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
 =======
 >>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
 =======
