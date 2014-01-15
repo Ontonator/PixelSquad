@@ -5,7 +5,7 @@ import java.awt.Image;
 
 public abstract class Tile {
 
-	double x, y, w, h;
+	public double x, y, w, h;
 
 	public Image sprite;
 
