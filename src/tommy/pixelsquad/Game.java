@@ -37,7 +37,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private static final int RIGHT_KEY = KeyEvent.VK_D;
 
 	public final ArrayList<Player> player = new ArrayList<Player>();
-	public static final int CHANGE_PLAYER_KEY = KeyEvent.VK_SPACE;
+	public static final int CHANGE_PLAYER_KEY = KeyEvent.VK_SHIFT;
 	public short currentPlayer;
 
 	public final ArrayList<Tile> tile = new ArrayList<Tile>();
@@ -150,7 +150,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			for (int j = 0; j < zb[i].length; j++)
 				zb[i][j] = -Double.MAX_VALUE;
 
-		g.setColor(Color.MAGENTA.darker());
+		g.setColor(Color.GRAY);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
 		for (Player i : player)
@@ -159,14 +159,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		for (Tile i : tile)
 			i.draw(g, zb, 0, 0);
 
-		g.setPaint(Color.GREEN.brighter());
 		Player selPl = player.get(currentPlayer);
+		g.setPaint(Color.GREEN.brighter());
 		g.draw(new Rectangle2D.Double(selPl.x + selPl.visualXOffset, selPl.y
 				+ selPl.visualYOffset, selPl.visualW - 1, selPl.visualH - 1));
 
-		g.setColor(Color.WHITE);
-		g.drawString(Double.toString(player.get(currentPlayer).x), 0, g
-				.getFontMetrics().getHeight());
 		g.dispose();
 		bs.show();
 

@@ -50,11 +50,11 @@ public abstract class Lib {
 						int alpha = pixel & 0xff000000;
 						if (alpha != 0) {
 
-							int red = pixel & 0xff0000 >> 16;
-							int green = pixel & 0xff00 >> 8;
-							int blue = pixel & 0x000000ff;
+							//int red = pixel & 0xff0000 >> 16;
+							//int green = pixel & 0xff00 >> 8;
+							//int blue = pixel & 0xff;
 
-							g.setPaint(new Color(red, green, blue));
+							g.setPaint(new Color(pixel));//red, green, blue));
 							g.fill(new Rectangle2D.Double(x + i, y + j, 1, 1));
 
 							zb[windowPixelX][windowPixelY] = z;

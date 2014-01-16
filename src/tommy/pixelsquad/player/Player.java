@@ -1,6 +1,5 @@
 package tommy.pixelsquad.player;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
 
 import tommy.pixelsquad.*;
@@ -12,6 +11,18 @@ public abstract class Player extends Entity {
 	public Player(Game game, Image[] spriteArray, double moveSp) {
 
 		super(game, spriteArray);
+
+		w = 24;
+		h = 24;
+
+		visualW = 32;
+		visualH = 48;
+
+		visualXOffset = (w - visualW) / 2;
+		visualYOffset = (h - visualH) / 2 - 16;
+
+		x = -visualXOffset;
+		y = -visualYOffset;
 
 		this.moveSp = moveSp;
 
@@ -44,17 +55,6 @@ public abstract class Player extends Entity {
 					dir = 1;
 			}
 		}
-
-	}
-
-	public void draw(Graphics2D g, double[][] zb, double relativeX,
-			double relativeY) {
-
-		Lib.drawImageZb(g, zb, spriteArray[dir],
-				(int) Math.round(x + visualXOffset),
-				(int) Math.round(y + visualYOffset), y + visualYOffset
-						+ visualH, (int) Math.round(visualW),
-				(int) Math.round(visualH));
 
 	}
 
