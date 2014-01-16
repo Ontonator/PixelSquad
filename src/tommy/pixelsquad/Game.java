@@ -30,7 +30,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private boolean running = false;
 
 	public boolean up, down, left, right;
-<<<<<<< HEAD
 
 	private static final int UP_KEY = KeyEvent.VK_UP;// W;
 	private static final int DOWN_KEY = KeyEvent.VK_DOWN;// S;
@@ -43,42 +42,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	public final ArrayList<Tile> tile = new ArrayList<Tile>();
 
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	private static final int UP_KEY = KeyEvent.VK_UP;// W;
-	private static final int DOWN_KEY = KeyEvent.VK_DOWN;// S;
-	private static final int LEFT_KEY = KeyEvent.VK_LEFT;// A;
-	private static final int RIGHT_KEY = KeyEvent.VK_RIGHT;// D;
-=======
-=======
->>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
-=======
->>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
-=======
->>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
-	private static final int upKey = KeyEvent.VK_W;// W;
-	private static final int downKey = KeyEvent.VK_S;// S;
-	private static final int leftKey = KeyEvent.VK_A;// A;
-	private static final int rightKey = KeyEvent.VK_D;// D;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
-
-	public final Player[] player = new Player[4];
-	public static final int CHANGE_PLAYER_KEY = KeyEvent.VK_SPACE;
-	public short currentPlayer;
-=======
->>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
-=======
->>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
-=======
->>>>>>> e3b7079d5726e3977e1764555edcaa5c073097e5
-
->>>>>>> 8f0bca70569113ae82b2454981aa93246c6391c6
 	public static Image[] sprNinja = new Image[4];
 	public static Image[] sprWizard = new Image[4];
 
@@ -117,7 +80,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			e.printStackTrace();
 		}
 
-<<<<<<< HEAD
 		player.add(new Ninja(this));
 		player.add(new Wizard(this));
 		player.add(new Ninja(this));
@@ -131,14 +93,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		}
 
 		player.get(0).selected = true;
-=======
-		player[0] = new Ninja(this);
-		player[1] = new Wizard(this);
-		player[2] = new Ninja(this);
-		player[3] = new Wizard(this);
-
-		player[0].selected = true;
->>>>>>> 8f0bca70569113ae82b2454981aa93246c6391c6
 
 		addKeyListener(this);
 
@@ -200,19 +154,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g.fillRect(0, 0, getWidth(), getHeight());
 
 		for (Player i : player)
-<<<<<<< HEAD
 			i.draw(g, zb, 0, 0);
 
 		for (Tile i : tile)
 			i.draw(g, zb, 0, 0);
-=======
-			i.draw(g, 0, 0);
-
-		g.setPaint(Color.GREEN.brighter());
-		Player selPl = player[currentPlayer];
-		g.draw(new Rectangle2D.Double(selPl.x, selPl.y, selPl.w - 1,
-				selPl.h - 1));
->>>>>>> 8f0bca70569113ae82b2454981aa93246c6391c6
 
 		g.setPaint(Color.GREEN.brighter());
 		Player selPl = player.get(currentPlayer);
@@ -249,7 +194,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		else if (e.getKeyCode() == RIGHT_KEY)
 			right = true;
 		else if (e.getKeyCode() == CHANGE_PLAYER_KEY) {
-<<<<<<< HEAD
 			player.get(currentPlayer).selected = false;
 
 			currentPlayer++;
@@ -257,18 +201,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 				currentPlayer -= player.size();
 
 			player.get(currentPlayer).selected = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER)
-			player.add(new Ninja(this));
-=======
-			player[currentPlayer].selected = false;
-
-			currentPlayer++;
-			if (currentPlayer > 3)
-				currentPlayer -= 4;
-
-			player[currentPlayer].selected = true;
 		}
->>>>>>> 8f0bca70569113ae82b2454981aa93246c6391c6
 
 	}
 
