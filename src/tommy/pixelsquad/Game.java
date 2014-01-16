@@ -42,8 +42,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	public final ArrayList<Tile> tile = new ArrayList<Tile>();
 
-	public static Image[] sprNinja = new Image[4];
-	public static Image[] sprWizard = new Image[4];
+	public static final Image[] sprNinja = new Image[4];
+	public static final Image[] sprWizard = new Image[4];
+
+	public static Image sprGrass;
+	public static Image sprGrassLong;
 
 	public Game() {
 		Dimension size = new Dimension(WIDTH, HEIGHT);
@@ -76,6 +79,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 					"/tommy/pixelsquad/resources/wizard/left.png"));
 			sprWizard[3] = ImageIO.read(getClass().getResource(
 					"/tommy/pixelsquad/resources/wizard/front.png"));
+
+			sprGrass = ImageIO.read(getClass().getResource(
+					"/tommy/pixelsquad/resources/tiles/grass.png"));
+			sprGrassLong = ImageIO.read(getClass().getResource(
+					"/tommy/pixelsquad/resources/tiles/grassLong.png"));
 		} catch (IOException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
@@ -85,12 +93,19 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		player.add(new Ninja(this));
 		player.add(new Wizard(this));
 
-		for (int i = 0; i < 5; i++) {
-			boolean solid = Math.random() < 0.5;
-			tile.add(new Tile(solid ? sprNinja[0] : sprWizard[0], solid, Math
-					.random() * (WIDTH - 10), Math.random() * (HEIGHT - 10),
-					20, 20));
-		}
+		double tileWidth = sprGrass.getWidth(null) * 2;
+		double tileHeight = sprGrass.getHeight(null) * 2;
+		for (int i = 0; i < WIDTH; i += tileWidth)
+			for (int j = 0; j < HEIGHT; j += tileHeight)
+				tile.add(new Tile(sprGrass, false, false, i, j, tileWidth,
+						tileHeight));
+
+		tileWidth = sprGrassLong.getWidth(null);
+		tileHeight = sprGrassLong.getHeight(null);
+		for (int i = 0; i < 20; i++)
+			tile.add(new Tile(sprGrassLong, false, true, Math.random()
+					* (WIDTH - tileWidth),
+					Math.random() * (WIDTH - tileHeight), tileWidth, tileHeight));
 
 		player.get(0).selected = true;
 
@@ -142,7 +157,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			createBufferStrategy(3);
 			return;
 		}
-
+		
 		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
 
 		double[][] zb = new double[WIDTH][HEIGHT];

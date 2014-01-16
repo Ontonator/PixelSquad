@@ -1,9 +1,7 @@
 package tommy.pixelsquad;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
@@ -19,10 +17,11 @@ public abstract class Lib {
 	public static void drawImageZb(Graphics2D g, double[][] zb, Image image,
 			int x, int y, double z, int w, int h) {
 
-		BufferedImage bi = new BufferedImage(image.getWidth(null),
-				image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(w,// image.getWidth(null),
+				h,// image.getHeight(null),
+				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = bi.createGraphics();
-		g2.drawImage(image, 0, 0, null);
+		g2.drawImage(image, 0, 0, w, h, null);
 		g2.dispose();
 
 		int[] biDataBuffer = ((DataBufferInt) bi.getRaster().getDataBuffer())
@@ -34,35 +33,19 @@ public abstract class Lib {
 
 					int windowPixelX = x + i;
 					int windowPixelY = y + j;
+					int pixelNum = i + j * w;
 
 					if (checkCollisionBB(windowPixelX, windowPixelY, 0, 0, 1,
 							1, Game.WIDTH, Game.HEIGHT)
-							&& z > zb[windowPixelX][windowPixelY]) {
+							&& (z > zb[windowPixelX][windowPixelY] || (z == -Double.MAX_VALUE && zb[windowPixelX][windowPixelY] == -Double.MAX_VALUE))
+							&& (biDataBuffer[pixelNum] & 0xff000000) != 0)
 
-						int pixelX = (int) Math.floor((double) i / w
-								* image.getWidth(null));
-						int pixelY = (int) Math.floor((double) j / h
-								* image.getHeight(null));
+						zb[windowPixelX][windowPixelY] = z;
+					else
+						biDataBuffer[pixelNum] = 0;
 
-						int pixel = biDataBuffer[pixelX + pixelY
-								* bi.getWidth()];
-
-						int alpha = pixel & 0xff000000;
-						if (alpha != 0) {
-
-							//int red = pixel & 0xff0000 >> 16;
-							//int green = pixel & 0xff00 >> 8;
-							//int blue = pixel & 0xff;
-
-							g.setPaint(new Color(pixel));//red, green, blue));
-							g.fill(new Rectangle2D.Double(x + i, y + j, 1, 1));
-
-							zb[windowPixelX][windowPixelY] = z;
-
-						}
-
-					}
 				}
+			g.drawImage(bi, x, y, null);
 		} catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
@@ -113,5 +96,5 @@ public abstract class Lib {
 			ent.x += (positive ? moveSp : -moveSp);
 
 	}
-	
+
 }

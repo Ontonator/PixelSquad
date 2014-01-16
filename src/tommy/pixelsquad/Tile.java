@@ -10,12 +10,15 @@ public class Tile {
 	public Image sprite;
 
 	public boolean solid;
+	public boolean extruding;
 
-	public Tile(Image sprite, boolean solid, double x, double y, double w,
+	public Tile(Image sprite, boolean solid, boolean extruding, double x, double y, double w,
 			double h) {
 
 		this.sprite = sprite;
+		
 		this.solid = solid;
+		this.extruding = extruding;
 
 		this.x = x;
 		this.y = y;
@@ -28,7 +31,7 @@ public class Tile {
 			double relativeY) {
 
 		Lib.drawImageZb(g, zb, sprite, (int) Math.round(x),
-				(int) Math.round(y), y + h, (int) Math.round(w),
+				(int) Math.round(y), extruding ? y + h : -Double.MAX_VALUE, (int) Math.round(w),
 				(int) Math.round(h));
 
 	}
