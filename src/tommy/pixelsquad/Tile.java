@@ -3,7 +3,7 @@ package tommy.pixelsquad;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
-public abstract class Tile {
+public class Tile {
 
 	public double x, y, w, h;
 
@@ -24,11 +24,13 @@ public abstract class Tile {
 
 	}
 
-	public void draw(Graphics2D g, double relativeX, double relativeY) {
+	public void draw(Graphics2D g, double[][] zb, double relativeX,
+			double relativeY) {
 
-		g.drawImage(sprite, (int) Math.round(x - relativeX),
-				(int) Math.round(y - relativeY), (int) Math.round(w),
-				(int) Math.round(h), null);
+		Lib.drawImageZb(g, zb, sprite, (int) Math.round(x),
+				(int) Math.round(y), y + h, (int) Math.round(w),
+				(int) Math.round(h));
 
 	}
+
 }

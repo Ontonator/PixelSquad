@@ -3,29 +3,16 @@ package tommy.pixelsquad.player;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
-import tommy.pixelsquad.Game;
-import tommy.pixelsquad.Lib;
+import tommy.pixelsquad.*;
 
-public abstract class Player {
-
-	public double x = 0;
-	public double y = 0;
-	public double w = 32;
-	public double h = 48;
-	public double hsp, vsp;
-	public short dir = 3;
-
-	public double moveSp;
+public abstract class Player extends Entity {
 
 	public boolean selected;
 
-	public Game game;
-	public Image[] spriteArray;
-
 	public Player(Game game, Image[] spriteArray, double moveSp) {
 
-		this.game = game;
-		this.spriteArray = spriteArray;
+		super(game, spriteArray);
+
 		this.moveSp = moveSp;
 
 	}
@@ -34,25 +21,25 @@ public abstract class Player {
 
 		if (selected) {
 			if (game.left) {
-				x -= moveSp;
+				Lib.smartMove(this, 2, moveSp);
 				if (!game.right)
 					dir = 2;
 			}
 
 			if (game.right) {
-				x += moveSp;
+				Lib.smartMove(this, 0, moveSp);
 				if (!game.left)
 					dir = 0;
 			}
 
 			if (game.down) {
-				y += moveSp;
+				Lib.smartMove(this, 3, moveSp);
 				if (!game.up)
 					dir = 3;
 			}
 
 			if (game.up) {
-				y -= moveSp;
+				Lib.smartMove(this, 1, moveSp);
 				if (!game.down)
 					dir = 1;
 			}
@@ -63,9 +50,12 @@ public abstract class Player {
 	public void draw(Graphics2D g, double[][] zb, double relativeX,
 			double relativeY) {
 
-		Lib.drawImageZb(g, zb, spriteArray[dir], (int) Math.round(x),
-				(int) Math.round(y), y + 18, (int) Math.round(w),
-				(int) Math.round(h));
+		Lib.drawImageZb(g, zb, spriteArray[dir],
+				(int) Math.round(x + visualXOffset),
+				(int) Math.round(y + visualYOffset), y + visualYOffset
+						+ visualH, (int) Math.round(visualW),
+				(int) Math.round(visualH));
 
 	}
+
 }

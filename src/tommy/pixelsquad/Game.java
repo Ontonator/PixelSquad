@@ -22,14 +22,12 @@ import tommy.pixelsquad.player.Wizard;
 public class Game extends Canvas implements Runnable, KeyListener {
 
 	private static final long serialVersionUID = 1L;
-	public static final int width = 300;
-	public static final int height = width / 16 * 9;
-	public static final int scale = 3;
+	public static final int WIDTH = 900;
+	public static final int HEIGHT = WIDTH / 16 * 9;
 
 	private Thread thread;
 	private JFrame frame;
 	private boolean running = false;
-	private long ticks = 0;
 
 	public boolean up, down, left, right;
 
@@ -42,11 +40,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static final int CHANGE_PLAYER_KEY = KeyEvent.VK_SPACE;
 	public short currentPlayer;
 
+	public final ArrayList<Tile> tile = new ArrayList<Tile>();
+
 	public static Image[] sprNinja = new Image[4];
 	public static Image[] sprWizard = new Image[4];
 
 	public Game() {
-		Dimension size = new Dimension(width * scale, height * scale);
+		Dimension size = new Dimension(WIDTH, HEIGHT);
 		setPreferredSize(size);
 
 		frame = new JFrame();
@@ -85,6 +85,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		player.add(new Ninja(this));
 		player.add(new Wizard(this));
 
+		for (int i = 0; i < 5; i++) {
+			boolean solid = Math.random() < 0.5;
+			tile.add(new Tile(solid ? sprNinja[0] : sprWizard[0], solid, Math
+					.random() * (WIDTH - 10), Math.random() * (HEIGHT - 10),
+					20, 20));
+		}
+
 		player.get(0).selected = true;
 
 		addKeyListener(this);
@@ -114,7 +121,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		while (running)
 			if (lastTick < System.nanoTime() - 20000000) {
 				lastTick += 20000000;
-				ticks++;
 				update();
 			}
 
@@ -139,10 +145,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
 
-		double[][] zb = new double[width][height];
-		for (int i = 0; i < width; i++)
-			for (int j = 0; j < height; j++)
-				zb[i][j] = Double.MIN_VALUE;
+		double[][] zb = new double[WIDTH][HEIGHT];
+		for (int i = 0; i < zb.length; i++)
+			for (int j = 0; j < zb[i].length; j++)
+				zb[i][j] = -Double.MAX_VALUE;
 
 		g.setColor(Color.MAGENTA.darker());
 		g.fillRect(0, 0, getWidth(), getHeight());
@@ -150,13 +156,17 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		for (Player i : player)
 			i.draw(g, zb, 0, 0);
 
+		for (Tile i : tile)
+			i.draw(g, zb, 0, 0);
+
 		g.setPaint(Color.GREEN.brighter());
 		Player selPl = player.get(currentPlayer);
-		g.draw(new Rectangle2D.Double(selPl.x, selPl.y, selPl.w - 1,
-				selPl.h - 1));
+		g.draw(new Rectangle2D.Double(selPl.x + selPl.visualXOffset, selPl.y
+				+ selPl.visualYOffset, selPl.visualW - 1, selPl.visualH - 1));
 
-		g.setColor(Color.BLACK);
-		g.drawString(Long.toString(ticks), 0, g.getFontMetrics().getHeight());
+		g.setColor(Color.WHITE);
+		g.drawString(Double.toString(player.get(currentPlayer).x), 0, g
+				.getFontMetrics().getHeight());
 		g.dispose();
 		bs.show();
 
