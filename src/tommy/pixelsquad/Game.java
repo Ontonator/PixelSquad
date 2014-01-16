@@ -31,10 +31,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	public boolean up, down, left, right;
 
-	private static final int UP_KEY = KeyEvent.VK_UP;// W;
-	private static final int DOWN_KEY = KeyEvent.VK_DOWN;// S;
-	private static final int LEFT_KEY = KeyEvent.VK_LEFT;// A;
-	private static final int RIGHT_KEY = KeyEvent.VK_RIGHT;// D;
+	private static final int UP_KEY = KeyEvent.VK_W;
+	private static final int DOWN_KEY = KeyEvent.VK_S;
+	private static final int LEFT_KEY = KeyEvent.VK_A;
+	private static final int RIGHT_KEY = KeyEvent.VK_D;
 
 	public final ArrayList<Player> player = new ArrayList<Player>();
 	public static final int CHANGE_PLAYER_KEY = KeyEvent.VK_SPACE;
