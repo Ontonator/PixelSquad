@@ -1,12 +1,13 @@
 package tommy.pixelsquad.player;
 
 import tommy.pixelsquad.Game;
+import tommy.pixelsquad.Room;
 
 public class Ninja extends Player {
 
-	public Ninja(Game game) {
+	public Ninja(Room room) {
 
-		super(game, Game.sprNinja, 3);
+		super(room, Game.sprNinja, 3);
 
 	}
 

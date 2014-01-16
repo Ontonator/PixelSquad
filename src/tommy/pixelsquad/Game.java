@@ -10,7 +10,6 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -36,11 +35,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private static final int LEFT_KEY = KeyEvent.VK_A;
 	private static final int RIGHT_KEY = KeyEvent.VK_D;
 
-	public final ArrayList<Player> player = new ArrayList<Player>();
+	public Room room = new Room(this, WIDTH * 2, HEIGHT * 2);
+
 	public static final int CHANGE_PLAYER_KEY = KeyEvent.VK_SHIFT;
 	public short currentPlayer;
-
-	public final ArrayList<Tile> tile = new ArrayList<Tile>();
 
 	public static final Image[] sprNinja = new Image[4];
 	public static final Image[] sprWizard = new Image[4];
@@ -48,13 +46,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static Image sprGrass;
 	public static Image sprGrassLong;
 	public static Image sprRockSmall;
+	public static Image sprVoid;
 
 	public Game() {
-		Dimension size = new Dimension(WIDTH, HEIGHT);
-		setPreferredSize(size);
 
 		frame = new JFrame();
 		frame.setResizable(false);
+		frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		frame.setTitle("PixelSquad (Beta)");
 		frame.add(this);
 		frame.pack();
@@ -87,37 +85,37 @@ public class Game extends Canvas implements Runnable, KeyListener {
 					"/tommy/pixelsquad/resources/tiles/bush.png");
 			sprRockSmall = Lib.getImage(getClass(),
 					"/tommy/pixelsquad/resources/tiles/rockSmall.png");
+			sprVoid = Lib.getImage(getClass(),
+					"/tommy/pixelsquad/resources/tiles/void.png");
 		} catch (IOException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 
-		player.add(new Ninja(this));
-		player.add(new Wizard(this));
-		player.add(new Ninja(this));
-		player.add(new Wizard(this));
+		room.player.add(new Ninja(room));
+		room.player.add(new Wizard(room));
 
 		double tileWidth = sprGrass.getWidth(null) * pixelSize;
 		double tileHeight = sprGrass.getHeight(null) * pixelSize;
-		for (int i = 0; i < WIDTH; i += tileWidth)
-			for (int j = 0; j < HEIGHT; j += tileHeight)
-				tile.add(new Tile(sprGrass, false, false, i, j, tileWidth,
+		for (int i = 0; i < room.w; i += tileWidth)
+			for (int j = 0; j < room.h; j += tileHeight)
+				room.tile.add(new Tile(sprGrass, false, false, i, j, tileWidth,
 						tileHeight));
 
 		tileWidth = sprGrassLong.getWidth(null) * pixelSize;
 		tileHeight = sprGrassLong.getHeight(null) * pixelSize;
 		for (int i = 0; i < 20; i++)
-			tile.add(new Tile(sprGrassLong, false, true, Math.random()
-					* (WIDTH - tileWidth),
-					Math.random() * (WIDTH - tileHeight), tileWidth, tileHeight));
+			room.tile.add(new Tile(sprGrassLong, false, true, Math.random()
+					* (room.w - tileWidth), Math.random()
+					* (room.h - tileHeight), tileWidth, tileHeight));
 
 		tileWidth = sprRockSmall.getWidth(null) * pixelSize;
 		tileHeight = sprRockSmall.getHeight(null) * pixelSize;
 		for (int i = 0; i < 30; i++)
-			tile.add(new Tile(sprRockSmall, true, true, Math.random()
+			room.tile.add(new Tile(sprRockSmall, true, true, Math.random()
 					* (WIDTH - tileWidth), Math.random()
 					* (HEIGHT - tileHeight), tileWidth, tileHeight));
 
-		player.get(0).selected = true;
+		room.player.get(0).selected = true;
 
 		addKeyListener(this);
 
@@ -153,7 +151,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	public synchronized void update() {
 
-		for (Player i : player)
+		for (Player i : room.player)
 			i.step();
 
 		render();
@@ -175,18 +173,33 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			for (int j = 0; j < zb[i].length; j++)
 				zb[i][j] = -Double.MAX_VALUE;
 
-		for (Player i : player)
-			i.draw(g, zb, 0, 0);
+		Player selPl = room.player.get(currentPlayer);
 
-		for (Tile i : tile)
-			i.draw(g, zb, 0, 0);
+		double relativeX = selPl.x + selPl.visualXOffset + selPl.visualW / 2
+				- WIDTH / 2;
+		double relativeY = selPl.y + selPl.visualYOffset + selPl.visualH / 2
+				- HEIGHT / 2;
 
-		Player selPl = player.get(currentPlayer);
+		if (relativeX < 0)
+			relativeX = 0;
+		else if (relativeX + WIDTH > room.w)
+			relativeX = room.w - WIDTH;
+
+		if (relativeY < 0)
+			relativeY = 0;
+		else if (relativeY + HEIGHT > room.h)
+			relativeY = room.h - HEIGHT;
+
+		for (Player i : room.player)
+			i.draw(g, zb, relativeX, relativeY);
+
+		for (Tile i : room.tile)
+			i.draw(g, zb, relativeX, relativeY);
+
 		g.setPaint(Color.GREEN.brighter());
-		g.draw(new Rectangle2D.Double(
-				Math.round(selPl.x + selPl.visualXOffset), Math.round(selPl.y
-						+ selPl.visualYOffset), selPl.visualW - 1,
-				selPl.visualH - 1));
+		g.draw(new Rectangle2D.Double(Math.round(selPl.x + selPl.visualXOffset
+				- relativeX), Math.round(selPl.y + selPl.visualYOffset
+				- relativeY), selPl.visualW - 1, selPl.visualH - 1));
 
 		g.dispose();
 		bs.show();
@@ -215,15 +228,16 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		else if (e.getKeyCode() == RIGHT_KEY)
 			right = true;
 		else if (e.getKeyCode() == CHANGE_PLAYER_KEY) {
-			player.get(currentPlayer).selected = false;
+			room.player.get(currentPlayer).selected = false;
 
 			currentPlayer++;
-			if (currentPlayer >= player.size())
-				currentPlayer -= player.size();
+			if (currentPlayer >= room.player.size())
+				currentPlayer -= room.player.size();
 
-			player.get(currentPlayer).selected = true;
+			room.player.get(currentPlayer).selected = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_EQUALS)
-			player.add(Math.random() < 0.5 ? new Ninja(this) : new Wizard(this));
+			room.player.add(Math.random() < 0.5 ? new Ninja(room) : new Wizard(
+					room));
 
 	}
 

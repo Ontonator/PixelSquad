@@ -20,9 +20,7 @@ public abstract class Lib {
 	public static void drawImageZb(Graphics2D g, double[][] zb, Image image,
 			int x, int y, double z, int w, int h) {
 
-		BufferedImage bi = new BufferedImage(w,// image.getWidth(null),
-				h,// image.getHeight(null),
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = bi.createGraphics();
 		g2.drawImage(image, 0, 0, w, h, null);
 		g2.dispose();
@@ -66,10 +64,8 @@ public abstract class Lib {
 		double entEdge = vertical ? ent.y + (positive ? ent.h : 0) : ent.x
 				+ (positive ? ent.w : 0);
 
-		double farthestValue = positive ? Double.MAX_VALUE : -Double.MAX_VALUE;
-
 		boolean colliding = false;
-		for (Tile i : ent.game.tile)
+		for (Tile i : ent.room.tile)
 			if (i.solid)
 				if (Lib.checkCollisionBB(ent.x + xOffset, ent.y + yOffset, i.x,
 						i.y, ent.w, ent.h, i.w, i.h)) {
@@ -78,8 +74,11 @@ public abstract class Lib {
 				}
 
 		if (colliding) {
+			double farthestValue = positive ? Double.MAX_VALUE
+					: -Double.MAX_VALUE;
+
 			double nextTile = farthestValue;
-			for (Tile i : ent.game.tile)
+			for (Tile i : ent.room.tile)
 				if (i.x < nextTile
 						&& Lib.checkCollisionBB(ent.x + xOffset, ent.y
 								+ yOffset, i.x, i.y, ent.w, ent.h, i.w, i.h)
@@ -100,8 +99,8 @@ public abstract class Lib {
 
 	}
 
-	public static Image getImage(@SuppressWarnings("rawtypes") Class objClass, String path)
-			throws IOException, IllegalArgumentException {
+	public static Image getImage(@SuppressWarnings("rawtypes") Class objClass,
+			String path) throws IOException, IllegalArgumentException {
 
 		return ImageIO.read(objClass.getResource(path));
 

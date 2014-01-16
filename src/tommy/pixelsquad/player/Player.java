@@ -8,9 +8,9 @@ public abstract class Player extends Entity {
 
 	public boolean selected;
 
-	public Player(Game game, Image[] spriteArray, double moveSp) {
+	public Player(Room room, Image[] spriteArray, double moveSp) {
 
-		super(game, spriteArray);
+		super(room, spriteArray);
 
 		w = 24;
 		h = 24;
@@ -31,27 +31,27 @@ public abstract class Player extends Entity {
 	public void step() {
 
 		if (selected) {
-			if (game.left) {
+			if (room.game.left) {
 				Lib.smartMove(this, 2, moveSp);
-				if (!game.right)
+				if (!room.game.right)
 					dir = 2;
 			}
 
-			if (game.right) {
+			if (room.game.right) {
 				Lib.smartMove(this, 0, moveSp);
-				if (!game.left)
+				if (!room.game.left)
 					dir = 0;
 			}
 
-			if (game.down) {
+			if (room.game.down) {
 				Lib.smartMove(this, 3, moveSp);
-				if (!game.up)
+				if (!room.game.up)
 					dir = 3;
 			}
 
-			if (game.up) {
+			if (room.game.up) {
 				Lib.smartMove(this, 1, moveSp);
-				if (!game.down)
+				if (!room.game.down)
 					dir = 1;
 			}
 		}

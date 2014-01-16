@@ -15,12 +15,12 @@ public abstract class Entity {
 
 	public double moveSp;
 
-	public Game game;
+	public Room room;
 	public Image[] spriteArray;
 
-	public Entity(Game game, Image[] spriteArray) {
+	public Entity(Room room, Image[] spriteArray) {
 
-		this.game = game;
+		this.room = room;
 		this.spriteArray = spriteArray;
 
 	}
@@ -28,11 +28,13 @@ public abstract class Entity {
 	public void draw(Graphics2D g, double[][] zb, double relativeX,
 			double relativeY) {
 
-		Lib.drawImageZb(g, zb, spriteArray[dir],
-				(int) Math.round(x + visualXOffset),
-				(int) Math.round(y + visualYOffset), y + visualYOffset
-						+ visualH, (int) Math.round(visualW),
-				(int) Math.round(visualH));
+		if (Lib.checkCollisionBB(x + visualXOffset, y + visualYOffset,
+				relativeX, relativeY, visualW, visualH, Game.WIDTH, Game.HEIGHT))
+			Lib.drawImageZb(g, zb, spriteArray[dir],
+					(int) Math.round(x + visualXOffset - relativeX),
+					(int) Math.round(y + visualYOffset - relativeY), y
+							+ visualYOffset + visualH,
+					(int) Math.round(visualW), (int) Math.round(visualH));
 
 	}
 
