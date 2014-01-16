@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public abstract class Lib {
 
@@ -94,6 +97,13 @@ public abstract class Lib {
 			ent.y += (positive ? moveSp : -moveSp);
 		else
 			ent.x += (positive ? moveSp : -moveSp);
+
+	}
+
+	public static Image getImage(@SuppressWarnings("rawtypes") Class objClass, String path)
+			throws IOException, IllegalArgumentException {
+
+		return ImageIO.read(objClass.getResource(path));
 
 	}
 

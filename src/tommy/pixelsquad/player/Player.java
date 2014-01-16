@@ -19,7 +19,7 @@ public abstract class Player extends Entity {
 		visualH = 48;
 
 		visualXOffset = (w - visualW) / 2;
-		visualYOffset = (h - visualH) / 2 - 16;
+		visualYOffset = h - visualH;
 
 		x = -visualXOffset;
 		y = -visualYOffset;
