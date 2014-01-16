@@ -43,6 +43,7 @@ public abstract class Player extends Entity {
 					dir = 0;
 			}
 
+			// TODO Fix collision bug
 			if (room.game.down) {
 				Lib.smartMove(this, 3, moveSp);
 				if (!room.game.up)
