@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import tommy.pixelsquad.TileType.Tile;
+
 public abstract class Lib {
 
 	public static boolean checkCollisionBB(double x1, double y1, double x2,
@@ -66,12 +68,14 @@ public abstract class Lib {
 
 		boolean colliding = false;
 		for (Tile i : ent.room.tile)
-			if (i.solid)
-				if (Lib.checkCollisionBB(ent.x + xOffset, ent.y + yOffset, i.x,
-						i.y, ent.w, ent.h, i.w, i.h)) {
-					colliding = true;
-					break;
-				}
+			// TODO fix errors; something to do with "this"
+			if (i.getOuter().solid
+					&& Lib.checkCollisionBB(ent.x + xOffset, ent.y + yOffset,
+							i.x, i.y, ent.w, ent.h, i.getOuter().w,
+							i.getOuter().h)) {
+				colliding = true;
+				break;
+			}
 
 		if (colliding) {
 			double farthestValue = positive ? Double.MAX_VALUE
@@ -79,14 +83,18 @@ public abstract class Lib {
 
 			double nextTile = farthestValue;
 			for (Tile i : ent.room.tile)
-				if (i.x < nextTile
+				if ((positive ? (vertical ? i.y : i.x) < nextTile
+						: (vertical ? i.y + i.getOuter().h : i.x
+								+ i.getOuter().w) > nextTile)
 						&& Lib.checkCollisionBB(ent.x + xOffset, ent.y
-								+ yOffset, i.x, i.y, ent.w, ent.h, i.w, i.h)
-						&& (vertical ? (positive ? i.y >= entEdge
-								: i.y + i.h <= entEdge)
-								: (positive ? i.x >= entEdge
-										: i.x + i.w <= entEdge)))
-					nextTile = vertical ? i.y : i.x;
+								+ yOffset, i.x, i.y, ent.w, ent.h,
+								i.getOuter().w, i.getOuter().h)
+						&& (vertical ? (positive ? i.y >= entEdge : i.y
+								+ i.getOuter().h <= entEdge)
+								: (positive ? i.x >= entEdge : i.x
+										+ i.getOuter().w <= entEdge)))
+					nextTile = vertical ? i.y + (positive ? 0 : i.getOuter().h)
+							: i.x + (positive ? 0 : i.getOuter().w);
 			if (nextTile != farthestValue)
 				if (vertical)
 					ent.y = nextTile - (positive ? ent.h : 0);

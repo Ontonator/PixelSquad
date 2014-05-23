@@ -8,18 +8,18 @@ public abstract class Player extends Entity {
 
 	public boolean selected;
 
-	public Player(Room room, Image[] spriteArray, double moveSp) {
+	public Player(Room room, Image[][] spriteArray, double moveSp) {
 
 		super(room, spriteArray);
 
-		w = 24;
-		h = 24;
+		w = 16;
+		h = 16;
 
 		visualW = 32;
 		visualH = 48;
 
 		visualXOffset = (w - visualW) / 2;
-		visualYOffset = h - visualH;
+		visualYOffset = h - visualH - 6;
 
 		x = -visualXOffset;
 		y = -visualYOffset;
@@ -30,7 +30,10 @@ public abstract class Player extends Entity {
 
 	public void step() {
 
-		if (selected) {
+		super.step();
+
+		if (selected
+				&& (room.game.left || room.game.right || room.game.down || room.game.up)) {
 			if (room.game.left) {
 				Lib.smartMove(this, 2, moveSp);
 				if (!room.game.right)
@@ -48,6 +51,7 @@ public abstract class Player extends Entity {
 				Lib.smartMove(this, 3, moveSp);
 				if (!room.game.up)
 					dir = 3;
+
 			}
 
 			if (room.game.up) {
@@ -55,7 +59,12 @@ public abstract class Player extends Entity {
 				if (!room.game.down)
 					dir = 1;
 			}
-		}
+
+			// cycleFrame();
+
+		} else
+
+			frame = 0;
 
 	}
 
